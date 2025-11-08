@@ -2,7 +2,6 @@ import nodemailer from 'nodemailer';
 import { MailOptions } from 'nodemailer/lib/json-transport';
 
 export async function sendEmail(mailOptions: nodemailer.SendMailOptions) {
-  console.log(process.env.EMAIL, process.env.PASSWORD);
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -11,5 +10,8 @@ export async function sendEmail(mailOptions: nodemailer.SendMailOptions) {
     },
   });
 
-  await transporter.sendMail(mailOptions);
+  await transporter.sendMail({
+    from: `E-commerce App <${process.env.EMAIL}>`,
+    ...mailOptions,
+  });
 }

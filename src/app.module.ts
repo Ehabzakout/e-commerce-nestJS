@@ -5,14 +5,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import devEnv from './config/dev.env';
 import { MongooseModule } from '@nestjs/mongoose';
-import {
-  Admin,
-  adminSchema,
-  Seller,
-  sellerSchema,
-  User,
-  userSchema,
-} from './models';
+import { UserModule } from '@modules/user/user.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [devEnv] }),
@@ -24,6 +18,7 @@ import {
     }),
 
     AuthModule,
+    UserModule,
   ],
 
   controllers: [AppController],

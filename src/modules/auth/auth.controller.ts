@@ -10,6 +10,8 @@ import {
 import { AuthService } from './auth.service';
 import { RegisterDTO } from './dto/register.dto';
 import { RegisterFactory } from './factory/register.factory';
+import { SendOtpDTO, VerifyDTO } from './dto/verify.dto';
+import { LoginDTO } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -17,6 +19,8 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly registerFactory: RegisterFactory,
   ) {}
+
+  // Register
   @Post('register')
   async register(@Body() registerDTO: RegisterDTO) {
     const customer = await this.registerFactory.createCustomer(registerDTO);
@@ -29,25 +33,24 @@ export class AuthController {
       createdCustomer,
     };
   }
+  // verify account
+  @Patch('verify-account')
+  async verifyAccount(@Body() verifyDTO: VerifyDTO) {
+    const message = await this.authService.verifyAccount(verifyDTO);
+    return { message, success: true };
+  }
 
-  // @Post()
-  // @Get()
-  // findAll() {
-  //   return this.authService.findAll();
-  // }
+  // Send OTP
+  @Patch('send-otp')
+  async sendOTP(@Body() sendOtpDTO: SendOtpDTO) {
+    const message = await this.authService.sendOTP(sendOtpDTO);
+    return { message, success: true };
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.authService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-  //   return this.authService.update(+id, updateAuthDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.authService.remove(+id);
-  // }
+  // Login
+  @Post('login')
+  async login(@Body() loginDTO: LoginDTO) {
+    const token = await this.authService.login(loginDTO);
+    return { message: 'Logged in successfully', success: true, token };
+  }
 }

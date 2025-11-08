@@ -12,6 +12,7 @@ export class Admin {
   lastName: string;
   email: string;
   password: string;
+  credentialUpdatedAt: Date;
 }
 
 export const adminSchema = SchemaFactory.createForClass(Admin);

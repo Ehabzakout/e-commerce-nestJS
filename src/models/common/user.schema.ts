@@ -29,6 +29,9 @@ export class User {
 
   @Prop({ type: Boolean })
   isVerified: boolean;
+
+  @Prop({ type: Date, default: Date.now() })
+  credentialUpdatedAt: Date;
 }
 
 export const userSchema = SchemaFactory.createForClass(User);

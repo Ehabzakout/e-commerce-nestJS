@@ -16,7 +16,7 @@ export class RegisterFactory {
     customer.otpExpiredAt = expiryDate();
     customer.isVerified = false;
     customer.dob = registerDTO.dob;
-
+    customer.credentialUpdatedAt = new Date(Date.now());
     return customer;
   }
 }

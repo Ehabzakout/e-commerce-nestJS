@@ -25,6 +25,7 @@ export class RegisterDTO {
 
   @IsNotEmpty()
   @IsString()
+  @MinLength(6)
   password: string;
 
   @Transform((value) => new Date(value.value))

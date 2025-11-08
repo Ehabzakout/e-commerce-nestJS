@@ -12,7 +12,7 @@ export class Seller {
   lastName: string;
   email: string;
   password: string;
-
+  credentialUpdatedAt: Date;
   @Prop({ type: String, length: 11, required: true })
   whatsApp: string;
 }

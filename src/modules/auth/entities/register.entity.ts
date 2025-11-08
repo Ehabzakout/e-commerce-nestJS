@@ -8,6 +8,6 @@ export class CustomerEntity {
   otp: string;
   otpExpiredAt: Date;
   isVerified: boolean;
-
+  credentialUpdatedAt: Date;
   dob: Date;
 }
