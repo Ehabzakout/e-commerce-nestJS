@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import devEnv from './config/dev.env';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from '@modules/user/user.module';
+import { BrandModule } from './modules/brand/brand.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UserModule } from '@modules/user/user.module';
 
     AuthModule,
     UserModule,
+    BrandModule,
   ],
 
   controllers: [AppController],

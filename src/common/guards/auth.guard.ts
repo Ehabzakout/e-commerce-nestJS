@@ -1,4 +1,4 @@
-import { JwtToken } from '@common/helpers/jwt';
+import { JwtToken } from '@shared/modules/jwt/jwt.service';
 import { CustomerRepo } from '@models';
 import {
   Injectable,
@@ -25,6 +25,7 @@ export class AuthGuard implements CanActivate {
 
     // Check user auth
     const { authorization } = request.headers;
+    if (!authorization) throw new UnauthorizedException('You should signin');
 
     const { _id, iat } = this.jwtToken.verifyToken(authorization.split(' ')[1]);
 

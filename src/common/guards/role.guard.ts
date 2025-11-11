@@ -15,15 +15,17 @@ export class RolesGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
+
     const publicRole = this.reflector.get('PUBLIC', context.getHandler());
     if (publicRole) return true;
+
     const roles = this.reflector.getAllAndMerge(Roles, [
       context.getClass(),
       context.getHandler(),
     ]);
 
     if (!roles.includes(request.user.role))
-      throw new ForbiddenException('Unauthorized');
+      throw new ForbiddenException('You are Unauthorized to do this step');
     return true;
   }
 }

@@ -17,7 +17,7 @@ import {
 } from '@common/helpers';
 import { SendOtpDTO, VerifyDTO } from './dto/verify.dto';
 import { LoginDTO } from './dto/login.dto';
-import { JwtToken } from '@common/helpers/jwt';
+import { JwtToken } from '@shared/modules/jwt/jwt.service';
 
 @Injectable()
 export class AuthService {

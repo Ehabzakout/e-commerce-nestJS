@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { UserMongoModule } from '@shared/modules/user-mongo.module';
-import { JwtToken } from '@common/helpers/jwt';
-import { JwtService } from '@nestjs/jwt';
+
+import { JwtModule } from '@shared/index';
 
 @Module({
-  imports: [UserMongoModule],
+  imports: [UserMongoModule, JwtModule],
   controllers: [UserController],
-  providers: [UserService, JwtToken, JwtService],
+  providers: [UserService],
 })
 export class UserModule {}

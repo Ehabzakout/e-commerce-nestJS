@@ -6,3 +6,6 @@ export * from './common/user.schema';
 
 export * from './customer/customer.repo';
 export * from './customer/customer.schema';
+
+export * from './brand/brand.repo';
+export * from './brand/brand.schema';
