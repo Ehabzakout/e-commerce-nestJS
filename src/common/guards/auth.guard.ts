@@ -1,5 +1,5 @@
 import { JwtToken } from '@shared/modules/jwt/jwt.service';
-import { CustomerRepo } from '@models';
+
 import {
   Injectable,
   CanActivate,
@@ -8,12 +8,13 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { UserRepo } from 'src/models/common/user.repo';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtToken: JwtToken,
-    private customerRepo: CustomerRepo,
+    private userRepo: UserRepo,
     private reflector: Reflector,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -27,10 +28,17 @@ export class AuthGuard implements CanActivate {
     const { authorization } = request.headers;
     if (!authorization) throw new UnauthorizedException('You should signin');
 
-    const { _id, iat } = this.jwtToken.verifyToken(authorization.split(' ')[1]);
+    // Check the token
+    const { _id, iat } = await this.jwtToken
+      .verifyToken(authorization.split(' ')[1])
+      .then((payload) => payload)
+      .catch((error) => {
+        throw new ForbiddenException(error.message);
+      });
 
-    const existedUser = await this.customerRepo.getOne({ _id: _id });
+    const existedUser = await this.userRepo.getOne({ _id: _id });
 
+    // Errors
     if (!existedUser) throw new UnauthorizedException('You are not signin ');
     if (!existedUser.isVerified)
       throw new ForbiddenException('You should verify your account');

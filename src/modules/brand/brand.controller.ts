@@ -1,25 +1,13 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { BrandService } from './brand.service';
 import { CreateBrandDto } from './dto/create-brand.dto';
-import { UpdateBrandDto } from './dto/update-brand.dto';
 import { BrandFactory } from './factory/index';
-import { Roles } from '@common/decorators/roles.decorator';
-import { AuthGuard } from '@common/guards/auth.guard';
-import { RolesGuard } from '@common/guards/role.guard';
+import { Auth } from '@common/decorators/auth.decorator';
+import { User } from '@common/decorators/user.decorator';
+import { type TUser } from '@common/types';
 
 @Controller('brand')
-@Roles(['Admin', 'Seller', 'Customer'])
-@UseGuards(AuthGuard, RolesGuard)
+@Auth(['Admin', 'Seller'])
 export class BrandController {
   constructor(
     private readonly brandService: BrandService,
@@ -27,8 +15,8 @@ export class BrandController {
   ) {}
 
   @Post('create')
-  create(@Req() req: any, @Body() createBrandDTO: CreateBrandDto) {
-    const brand = this.brandFactory.create(createBrandDTO, req.user);
+  create(@User() user: TUser, @Body() createBrandDTO: CreateBrandDto) {
+    const brand = this.brandFactory.create(createBrandDTO, user);
     const newBrand = this.brandService.create(brand);
     return { message: 'Brand created successfully', success: true, newBrand };
   }

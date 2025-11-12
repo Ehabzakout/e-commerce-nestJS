@@ -9,3 +9,6 @@ export * from './customer/customer.schema';
 
 export * from './brand/brand.repo';
 export * from './brand/brand.schema';
+
+export * from './category/category.repo';
+export * from './category/category.schema';

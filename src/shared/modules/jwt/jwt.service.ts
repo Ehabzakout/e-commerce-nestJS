@@ -1,4 +1,3 @@
-import devEnv from '@config/dev.env';
 import { Injectable } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -21,6 +20,6 @@ export class JwtToken {
   }
 
   verifyToken(token: string, secret = this.configService.get('jwt_secret')) {
-    return this.jwtService.verify(token, { secret });
+    return this.jwtService.verifyAsync(token, { secret });
   }
 }

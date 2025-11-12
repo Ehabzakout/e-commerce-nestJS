@@ -7,6 +7,7 @@ import devEnv from './config/dev.env';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from '@modules/user/user.module';
 import { BrandModule } from './modules/brand/brand.module';
+import { CategoryModule } from './modules/category/category.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { BrandModule } from './modules/brand/brand.module';
     AuthModule,
     UserModule,
     BrandModule,
+    CategoryModule,
   ],
 
   controllers: [AppController],

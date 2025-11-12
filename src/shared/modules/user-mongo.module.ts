@@ -13,6 +13,7 @@ import {
   Seller,
   sellerSchema,
 } from '@models';
+import { UserRepo } from 'src/models/common/user.repo';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import {
     ]),
   ],
   controllers: [],
-  providers: [SellerRepo, CustomerRepo, AdminRepo],
-  exports: [SellerRepo, CustomerRepo, AdminRepo],
+  providers: [SellerRepo, CustomerRepo, AdminRepo, UserRepo],
+  exports: [SellerRepo, CustomerRepo, AdminRepo, UserRepo],
 })
 export class UserMongoModule {}

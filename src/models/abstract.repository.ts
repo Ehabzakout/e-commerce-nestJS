@@ -23,7 +23,7 @@ export class AbstractRepo<T> {
   }
 
   async getMany(
-    filter: RootFilterQuery<T>,
+    filter: RootFilterQuery<T> = {},
     projection?: ProjectionType<T>,
     options?: QueryOptions<T>,
   ) {

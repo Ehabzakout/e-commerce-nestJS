@@ -7,7 +7,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
-import { CustomerRepo } from '@models';
 import { CustomerEntity } from './entities/register.entity';
 import {
   compareText,
@@ -18,22 +17,23 @@ import {
 import { SendOtpDTO, VerifyDTO } from './dto/verify.dto';
 import { LoginDTO } from './dto/login.dto';
 import { JwtToken } from '@shared/modules/jwt/jwt.service';
+import { UserRepo } from 'src/models/common/user.repo';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly customerRepo: CustomerRepo,
+    private readonly userRepo: UserRepo,
     private jwtToken: JwtToken,
   ) {}
 
   // Register
   async register(customer: CustomerEntity) {
     // Check if user exists before
-    const existed = await this.customerRepo.getOne({ email: customer.email });
+    const existed = await this.userRepo.getOne({ email: customer.email });
     if (existed) throw new ConflictException('Email is already exist');
 
     // Create new user
-    const newCustomer = await this.customerRepo.create(customer);
+    const newCustomer = await this.userRepo.create(customer);
 
     // Send verify Email with otp
     await sendEmail({
@@ -53,7 +53,7 @@ export class AuthService {
   // Verify Account
   async verifyAccount(verify: VerifyDTO) {
     // check existed user
-    const existedUser = await this.customerRepo.getOne({ email: verify.email });
+    const existedUser = await this.userRepo.getOne({ email: verify.email });
     if (!existedUser) throw new NotFoundException("Can't found user");
 
     // Check on otp
@@ -63,7 +63,7 @@ export class AuthService {
       throw new ForbiddenException('Expired OTP');
 
     // Verify account in Database
-    await this.customerRepo.updateOne(
+    await this.userRepo.updateOne(
       { _id: existedUser._id },
       { $unset: { otp: '', otpExpiredAt: '' }, $set: { isVerified: true } },
     );
@@ -78,7 +78,7 @@ export class AuthService {
     const otpExpiredAt = expiryDate();
 
     // check existed user and update
-    const existedUser = await this.customerRepo.getOneAndUpdate(
+    const existedUser = await this.userRepo.getOneAndUpdate(
       { email: sendOTP.email },
       { $set: { otp, otpExpiredAt } },
     );
@@ -97,7 +97,7 @@ export class AuthService {
   // Login
   async login({ email, password }: LoginDTO) {
     // check email and password
-    const existedUser = await this.customerRepo.getOne({ email });
+    const existedUser = await this.userRepo.getOne({ email });
     const match = await compareText(password, existedUser?.password ?? '');
 
     // throw error for invalid data
