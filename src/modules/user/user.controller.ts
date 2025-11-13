@@ -13,7 +13,6 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('profile')
-  @Public()
   getUserInfo(@Req() req: Request & { user: User }) {
     return {
       message: 'Success',

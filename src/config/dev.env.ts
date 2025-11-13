@@ -4,4 +4,5 @@ export default () => ({
   email: process.env.EMAIL,
   password: process.env.PASSWORD,
   jwt_secret: process.env.JWT_SECRET,
+  client_id: process.env.CLIENT_ID,
 });

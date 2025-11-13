@@ -12,6 +12,7 @@ import { RegisterDTO } from './dto/register.dto';
 import { RegisterFactory } from './factory/register.factory';
 import { SendOtpDTO, VerifyDTO } from './dto/verify.dto';
 import { LoginDTO } from './dto/login.dto';
+import { forgotPasswordDTO } from './dto/forgot-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -52,5 +53,17 @@ export class AuthController {
   async login(@Body() loginDTO: LoginDTO) {
     const token = await this.authService.login(loginDTO);
     return { message: 'Logged in successfully', success: true, token };
+  }
+
+  @Patch('forgot-password')
+  async forgotPassword(@Body() forgotPasswordDTO: forgotPasswordDTO) {
+    const message = await this.authService.forgotPassword(forgotPasswordDTO);
+    return { message, success: true };
+  }
+
+  @Post('login-by-google')
+  async loginByGoogle(@Body('tokenId') tokenId) {
+    const token = await this.authService.loginByGoogle(tokenId);
+    return { message: 'logged in successfully', success: true, token };
   }
 }

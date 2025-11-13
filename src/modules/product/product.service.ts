@@ -1,9 +1,9 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
+
 import { UpdateProductDto } from './dto/update-product.dto';
 import { CategoryService } from '@modules/category/category.service';
 import { BrandService } from '@modules/brand/brand.service';
-import { Product, ProductRepo } from '@models';
+import { ProductRepo } from '@models';
 import { ProductEntity } from './entities/product.entity';
 
 @Injectable()

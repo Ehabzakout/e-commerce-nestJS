@@ -16,7 +16,7 @@ export class Customer {
   otpExpiredAt: Date;
   isVerified: boolean;
   credentialUpdatedAt: Date;
-  @Prop({ type: Date, required: true })
+  @Prop({ type: Date })
   dob: Date;
 }
 

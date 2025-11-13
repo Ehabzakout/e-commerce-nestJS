@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
@@ -12,18 +13,27 @@ import {
   compareText,
   expiryDate,
   generateOTP,
+  hashText,
   sendEmail,
 } from '@common/helpers';
 import { SendOtpDTO, VerifyDTO } from './dto/verify.dto';
 import { LoginDTO } from './dto/login.dto';
 import { JwtToken } from '@shared/modules/jwt/jwt.service';
 import { UserRepo } from 'src/models/common/user.repo';
+import { forgotPasswordDTO } from './dto/forgot-password.dto';
+import { OAuth2Client, TokenPayload } from 'google-auth-library';
+import { ConfigService } from '@nestjs/config';
+import { CustomerRepo } from '@models';
+import { RegisterFactory } from './factory/register.factory';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userRepo: UserRepo,
+    private readonly customerRepo: CustomerRepo,
+    private readonly registerFactory: RegisterFactory,
     private jwtToken: JwtToken,
+    private configService: ConfigService,
   ) {}
 
   // Register
@@ -109,9 +119,58 @@ export class AuthService {
     const payload = {
       _id: existedUser._id,
       email: existedUser.email,
-      role: 'Customer',
     };
     const token = this.jwtToken.generateToken(payload);
+    return token;
+  }
+
+  // Forget password
+  async forgotPassword(forgotPasswordDTO: forgotPasswordDTO) {
+    // check if user exist
+    const existedUser = await this.userRepo.getOne({
+      email: forgotPasswordDTO.email,
+    });
+    if (!existedUser) throw new NotFoundException("Can't found email");
+
+    if (existedUser.otp !== forgotPasswordDTO.otp)
+      throw new BadRequestException('Invalid OTP');
+
+    if (existedUser.otpExpiredAt < new Date(Date.now()))
+      throw new ForbiddenException('Expired Otp');
+
+    // hash and update user password
+    const newPassword = await hashText(forgotPasswordDTO.password);
+    await this.userRepo.updateOne(
+      { _id: existedUser._id },
+      {
+        password: newPassword,
+        credentialUpdatedAt: Date.now(),
+        $unset: { otp: '', otpExpiredAt: '' },
+      },
+    );
+
+    return 'Your password updated successfully';
+  }
+
+  // Login and register by google
+  async loginByGoogle(tokenId: string) {
+    // Verify and get payload from google
+    const client = new OAuth2Client(this.configService.get('client_id'));
+    const ticket = await client.verifyIdToken({ idToken: tokenId });
+    const payload = ticket.getPayload();
+
+    // Check if user is exist if not register new user
+    let existedUser = await this.userRepo.getOne({ email: payload?.email });
+    if (!existedUser && payload) {
+      const newUser = this.registerFactory.createCustomerByGoogle(payload);
+
+      //@ts-expect-error
+      existedUser = await this.customerRepo.create(newUser);
+    }
+    const token = this.jwtToken.generateToken({
+      _id: existedUser?._id,
+      email: existedUser?.email,
+    });
     return token;
   }
 }
