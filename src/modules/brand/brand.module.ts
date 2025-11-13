@@ -14,5 +14,6 @@ import { JwtModule, UserMongoModule } from '@shared/index';
   ],
   controllers: [BrandController],
   providers: [BrandService, BrandRepo, BrandFactory],
+  exports: [BrandService, BrandRepo, BrandFactory],
 })
 export class BrandModule {}

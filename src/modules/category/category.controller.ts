@@ -10,7 +10,6 @@ import {
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-
 import { Auth } from '@common/decorators/auth.decorator';
 import { CategoryFactory } from './factory';
 import { type TUser } from '@common/types';
@@ -70,8 +69,10 @@ export class CategoryController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoryService.findOne(+id);
+  @Public()
+  async findOne(@Param('id') id: string) {
+    const category = await this.categoryService.findOne(id);
+    return { message: 'success', success: true, category };
   }
 
   @Delete(':id')

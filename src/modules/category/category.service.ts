@@ -1,7 +1,12 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { CategoryRepo } from '@models';
 import { CategoryEntity } from './entities/category.entity';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class CategoryService {
@@ -43,8 +48,37 @@ export class CategoryService {
     return categories;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: string | Types.ObjectId) {
+    const category = await this.categoryRepo.getOne(
+      { _id: id },
+      {},
+      {
+        populate: [
+          {
+            path: 'updatedBy',
+            select: {
+              firstName: 1,
+              lastName: 1,
+              email: 1,
+              role: 0,
+              _id: 0,
+            },
+          },
+          {
+            path: 'createdBy',
+            select: {
+              firstName: 1,
+              lastName: 1,
+              email: 1,
+              role: 0,
+              _id: 0,
+            },
+          },
+        ],
+      },
+    );
+    if (!category) throw new NotFoundException("can't found category");
+    return category;
   }
 
   async update(category: CategoryEntity, id: string) {
