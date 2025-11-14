@@ -89,11 +89,8 @@ export class CategoryService {
     if (exitedCategory)
       throw new ConflictException('this category is already exist');
 
-    const updatedCategory = await this.categoryRepo.updateOne(
-      { _id: id },
-      category,
-    );
-    return updatedCategory;
+    await this.categoryRepo.updateOne({ _id: id }, category);
+    return category;
   }
 
   async remove(id: string) {

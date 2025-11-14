@@ -8,7 +8,7 @@ import { BrandEntity } from '../entities/brand.entity';
 import { BrandRepo, User } from '@models';
 import { TUser } from '@common/types/user';
 import { UpdateBrandDto } from '../dto/update-brand.dto';
-import { BrandService } from '../brand.service';
+
 import slugify from 'slugify';
 
 @Injectable()

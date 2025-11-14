@@ -36,7 +36,7 @@ export class BrandService {
     });
     if (existed) throw new ConflictException('Brand is already exist');
     await this.brandRepo.updateOne({ _id: id }, brand);
-    return 'Your brand updated successfully';
+    return brand;
   }
 
   async getAll() {

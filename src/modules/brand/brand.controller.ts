@@ -38,9 +38,9 @@ export class BrandController {
     @User() user,
   ) {
     const brand = await this.brandFactory.update(updateBrandDto, id, user);
-    const message = await this.brandService.update(brand, id);
+    await this.brandService.update(brand, id);
     return {
-      message,
+      message: 'Brand update successfully',
       success: true,
       updatedBrand: brand,
     };

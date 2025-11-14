@@ -1,6 +1,5 @@
 import {
   Model,
-  MongooseBaseQueryOptionKeys,
   MongooseUpdateQueryOptions,
   ProjectionType,
   QueryOptions,
