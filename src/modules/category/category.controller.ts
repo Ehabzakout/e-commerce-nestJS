@@ -53,11 +53,12 @@ export class CategoryController {
       user,
     );
 
-    await this.categoryService.update(category, id);
+    const updatedCategory = await this.categoryService.update(category, id);
 
     return {
       message: 'category Updated successfully',
       success: true,
+      updatedCategory,
     };
   }
 
@@ -76,7 +77,12 @@ export class CategoryController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoryService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const deletedCategory = await this.categoryService.remove(id);
+    return {
+      message: 'You category has been deleted and related products',
+      success: true,
+      deletedCategory,
+    };
   }
 }

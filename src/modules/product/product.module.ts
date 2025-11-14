@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductController } from './product.controller';
 import { Product, ProductRepo, productSchema } from '@models';
@@ -12,10 +12,11 @@ import { UserMongoModule } from '@shared/index';
   imports: [
     UserMongoModule,
     MongooseModule.forFeature([{ name: Product.name, schema: productSchema }]),
-    CategoryModule,
-    BrandModule,
+    forwardRef(() => CategoryModule),
+    forwardRef(() => BrandModule),
   ],
   controllers: [ProductController],
   providers: [ProductService, ProductRepo, ProductFactory],
+  exports: [ProductService, ProductRepo, ProductFactory],
 })
 export class ProductModule {}

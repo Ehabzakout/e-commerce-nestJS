@@ -43,7 +43,7 @@ export class AuthService {
     if (existed) throw new ConflictException('Email is already exist');
 
     // Create new user
-    const newCustomer = await this.userRepo.create(customer);
+    const newCustomer = await this.customerRepo.create(customer);
 
     // Send verify Email with otp
     await sendEmail({

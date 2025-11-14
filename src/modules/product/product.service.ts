@@ -3,8 +3,9 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { CategoryService } from '@modules/category/category.service';
 import { BrandService } from '@modules/brand/brand.service';
-import { ProductRepo } from '@models';
+import { Product, ProductRepo } from '@models';
 import { ProductEntity } from './entities/product.entity';
+import { RootFilterQuery } from 'mongoose';
 
 @Injectable()
 export class ProductService {
@@ -38,5 +39,8 @@ export class ProductService {
 
   remove(id: number) {
     return `This action removes a #${id} product`;
+  }
+  async deleteManyProducts(filter: RootFilterQuery<Product>) {
+    return await this.productRepo.deleteMany(filter);
   }
 }

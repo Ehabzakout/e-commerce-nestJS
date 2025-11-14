@@ -8,11 +8,5 @@ export class CreateBrandDto {
   @MaxLength(30)
   name: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(2)
-  @MaxLength(30)
-  slug: string;
-
   logo: string;
 }

@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { CategoryRepo } from '@models';
+import { CategoryRepo, ProductRepo } from '@models';
 import { CategoryEntity } from './entities/category.entity';
 import { Types } from 'mongoose';
 
@@ -96,7 +96,13 @@ export class CategoryService {
     return updatedCategory;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: string) {
+    const existedCategory = await this.categoryRepo.getOneAndDelete({
+      _id: id,
+    });
+
+    if (!existedCategory) throw new NotFoundException("Can't found category");
+
+    return existedCategory;
   }
 }

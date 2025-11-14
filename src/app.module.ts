@@ -17,6 +17,9 @@ import { ProductModule } from './modules/product/product.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         uri: configService.get('db').url,
+        onConnectionCreate: () => {
+          console.log('Your DB connected successfully');
+        },
       }),
     }),
 

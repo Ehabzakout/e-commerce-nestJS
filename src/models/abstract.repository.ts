@@ -1,5 +1,6 @@
 import {
   Model,
+  MongooseBaseQueryOptionKeys,
   MongooseUpdateQueryOptions,
   ProjectionType,
   QueryOptions,
@@ -45,5 +46,11 @@ export class AbstractRepo<T> {
     options?: QueryOptions<T>,
   ) {
     return await this.model.findOneAndUpdate(filter, update, options);
+  }
+  async getOneAndDelete(filter: RootFilterQuery<T>) {
+    return await this.model.findOneAndDelete(filter);
+  }
+  async deleteMany(filters: RootFilterQuery<T>) {
+    return await this.model.deleteMany(filters);
   }
 }
