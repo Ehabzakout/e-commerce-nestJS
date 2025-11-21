@@ -149,7 +149,7 @@ export class AuthService {
       },
     );
 
-    return 'Your password updated successfully';
+    return 'Your password has been updated successfully';
   }
 
   // Login and register by google

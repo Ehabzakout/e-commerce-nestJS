@@ -1,3 +1,4 @@
+import { IsMatched } from '@common/decorators/match-password';
 import { Transform } from 'class-transformer';
 import {
   IsString,
@@ -27,6 +28,10 @@ export class RegisterDTO {
   @IsString()
   @MinLength(6)
   password: string;
+  @IsNotEmpty()
+  @IsString()
+  @IsMatched('password')
+  rePassword: string;
 
   @Transform((value) => new Date(value.value))
   @IsDate()

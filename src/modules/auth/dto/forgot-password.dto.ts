@@ -1,8 +1,10 @@
+import { IsMatched } from '@common/decorators/match-password';
 import {
   IsEmail,
   IsNotEmpty,
   IsString,
   Length,
+  Matches,
   MinLength,
 } from 'class-validator';
 
@@ -20,4 +22,9 @@ export class forgotPasswordDTO {
   @IsString()
   @MinLength(6)
   password: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @IsMatched('password')
+  rePassword: string;
 }

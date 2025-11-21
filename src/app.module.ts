@@ -9,6 +9,7 @@ import { UserModule } from '@modules/user/user.module';
 import { BrandModule } from './modules/brand/brand.module';
 import { CategoryModule } from './modules/category/category.module';
 import { ProductModule } from './modules/product/product.module';
+import { CouponModule } from './modules/coupon/coupon.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ProductModule } from './modules/product/product.module';
     BrandModule,
     CategoryModule,
     ProductModule,
+    CouponModule,
   ],
 
   controllers: [AppController],
