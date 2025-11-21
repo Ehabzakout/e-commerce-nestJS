@@ -33,7 +33,7 @@ export class AbstractRepo<T> {
   async updateOne(
     filter: RootFilterQuery<T>,
     update: UpdateQuery<T>,
-    options?: MongooseUpdateQueryOptions<T>,
+    options?: MongooseUpdateQueryOptions<T> & UpdateQuery<T>,
   ) {
     return await this.model.updateOne(filter, update, options);
   }

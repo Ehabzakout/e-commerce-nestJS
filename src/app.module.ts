@@ -10,6 +10,7 @@ import { BrandModule } from './modules/brand/brand.module';
 import { CategoryModule } from './modules/category/category.module';
 import { ProductModule } from './modules/product/product.module';
 import { CouponModule } from './modules/coupon/coupon.module';
+import { CartModule } from './modules/cart/cart.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { CouponModule } from './modules/coupon/coupon.module';
     CategoryModule,
     ProductModule,
     CouponModule,
+    CartModule,
   ],
 
   controllers: [AppController],

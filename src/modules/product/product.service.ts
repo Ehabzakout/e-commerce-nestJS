@@ -38,7 +38,13 @@ export class ProductService {
     return product;
   }
 
-  async update(id: string | Types.ObjectId, product: ProductEntity) {
+  async update(id: Types.ObjectId, product: ProductEntity) {
+    const existedCategory = await this.categoryService.findOne(
+      product.category,
+    );
+    const existedBrand = await this.brandService.findOne(product.brand);
+    if (!existedBrand || !existedCategory)
+      throw new NotFoundException("Can't found category or brand");
     const existedProduct = await this.findOne(id);
 
     const colors = this.createSet(existedProduct.colors, product.colors);

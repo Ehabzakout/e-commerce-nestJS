@@ -3,14 +3,13 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Put,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { ProductIdDTO, UpdateProductDto } from './dto/update-product.dto';
 import { ProductFactory } from './factory';
 import { User } from '@common/decorators/user.decorator';
 import { type TUser } from '@common/types';
@@ -50,16 +49,19 @@ export class ProductController {
 
   @Put('update/:id')
   async update(
-    @Param('id') id: string,
+    @Param() productParam: ProductIdDTO,
     @Body() updateProductDto: UpdateProductDto,
     @User() user: TUser,
   ) {
     const product = await this.productFactory.update(
-      id,
+      productParam.id,
       updateProductDto,
       user,
     );
-    const updatedProduct = await this.productService.update(id, product);
+    const updatedProduct = await this.productService.update(
+      productParam.id,
+      product,
+    );
     return {
       message: 'product updated successfully',
       success: true,

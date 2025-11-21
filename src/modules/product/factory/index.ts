@@ -30,7 +30,7 @@ export class ProductFactory {
 
     return product;
   }
-  async update(id: string, updateDTO: UpdateProductDto, user: TUser) {
+  async update(id: Types.ObjectId, updateDTO: UpdateProductDto, user: TUser) {
     const existedProduct = await this.productService.findOne(id);
     const product = new ProductEntity();
     const newName = updateDTO.name || existedProduct.name;
