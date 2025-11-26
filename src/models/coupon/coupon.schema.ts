@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { DISCOUNT_TYPE } from '../product/product.schema';
+import { DISCOUNT_TYPE } from '@common/types/order.types';
 import { SchemaTypes, Types } from 'mongoose';
+import { BadRequestException } from '@nestjs/common';
 
 @Schema()
 export class UserCoupon {
@@ -15,6 +16,7 @@ export class UserCoupon {
 
 @Schema({ timestamps: true })
 export class Coupon {
+  readonly _id: Types.ObjectId;
   @Prop({ type: String, required: true, length: 5, trim: true })
   code: string;
 
@@ -46,3 +48,13 @@ export class Coupon {
 }
 
 export const couponSchema = SchemaFactory.createForClass(Coupon);
+
+couponSchema.post(/^find/, function (doc, next) {
+  if (
+    !doc.active ||
+    doc.to < new Date(Date.now()) ||
+    doc.from > new Date(Date.now())
+  )
+    throw new BadRequestException('Invalid Coupon or expired');
+  next();
+});

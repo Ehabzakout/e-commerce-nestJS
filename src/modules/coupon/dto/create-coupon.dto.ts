@@ -1,6 +1,6 @@
 import { IsValidDate } from '@common/decorators/valid-date.decorator';
 import { IsValidDiscount } from '@common/decorators/valid-discount.decorator';
-import { DISCOUNT_TYPE } from '@models';
+import { DISCOUNT_TYPE } from '@common/types/order.types';
 import { Transform } from 'class-transformer';
 import {
   IsArray,

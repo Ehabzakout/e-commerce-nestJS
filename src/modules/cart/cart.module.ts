@@ -16,5 +16,6 @@ import { CartFactory } from './factory';
   ],
   controllers: [CartController],
   providers: [CartService, CartRepo, CartFactory],
+  exports: [CartService, CartRepo, CartFactory],
 })
 export class CartModule {}

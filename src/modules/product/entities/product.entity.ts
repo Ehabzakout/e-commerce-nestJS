@@ -1,4 +1,4 @@
-import { DISCOUNT_TYPE } from '@models';
+import { DISCOUNT_TYPE } from '@common/types';
 import { Types } from 'mongoose';
 
 export class ProductEntity {

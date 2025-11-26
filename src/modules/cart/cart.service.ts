@@ -24,7 +24,7 @@ export class CartService {
   async addProductToCart(addToCartDTO: AddToCartDtO, user: TUser) {
     // get product to add
     const product = await this.productService.findOne(addToCartDTO.productId);
-
+    if (!product) throw new NotFoundException("Can't found product");
     // check on stock
     if (product.stock < addToCartDTO.quantity)
       throw new NotAcceptableException("We don't have enough quantity");
@@ -84,7 +84,9 @@ export class CartService {
 
   async getCart(user: TUser) {
     const cart = await this.CartRepo.getOne({ userId: user._id });
-    if (!cart) throw new NotFoundException('There is now cart or Empty');
+
+    if (!cart || !cart.products.length)
+      throw new NotFoundException('There is now cart or Empty');
     return cart;
   }
 
@@ -110,12 +112,10 @@ export class CartService {
   }
 
   async clearCart(user: TUser) {
-    const cart = await this.getCart(user);
-    if (!cart.products.length)
-      throw new BadRequestException('Your cart is already empty');
-    return await this.CartRepo.updateOne(
-      { _id: cart._id },
-      { $set: { products: [] } },
-    );
+    const deletedCart = await this.CartRepo.getOneAndDelete({
+      userId: user._id,
+    });
+    if (!deletedCart) throw new BadRequestException('Your cart is Empty');
+    return deletedCart;
   }
 }

@@ -15,5 +15,6 @@ import { CouponFactory } from './factory';
   ],
   controllers: [CouponController],
   providers: [CouponService, CouponRepo, CouponFactory],
+  exports: [CouponService, CouponRepo, CouponFactory],
 })
 export class CouponModule {}

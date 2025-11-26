@@ -1,8 +1,9 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { CreateCouponDto } from './dto/create-coupon.dto';
+
 import { UpdateCouponDto } from './dto/update-coupon.dto';
 import { CouponEntity } from './entities/coupon.entity';
 import { CouponRepo } from 'src/models/coupon/coupon.repo';
+import { Coupon } from 'src/models/coupon/coupon.schema';
 
 @Injectable()
 export class CouponService {
@@ -21,8 +22,10 @@ export class CouponService {
     return `This action returns all coupon`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} coupon`;
+  async getOne(code: string): Promise<Coupon | string> {
+    const coupon = await this.couponRepo.getOne({ code });
+    if (coupon && coupon.active) return coupon;
+    else return 'Invalid coupon';
   }
 
   update(id: number, updateCouponDto: UpdateCouponDto) {

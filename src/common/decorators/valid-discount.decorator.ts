@@ -1,4 +1,4 @@
-import { DISCOUNT_TYPE } from '@models';
+import { DISCOUNT_TYPE } from '@common/types/order.types';
 import {
   registerDecorator,
   ValidationOptions,
