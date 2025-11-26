@@ -13,7 +13,8 @@ import { UpdateCartDto } from './dto/update-cart.dto';
 import { Auth } from '@common/decorators/auth.decorator';
 import { User } from '@common/decorators/user.decorator';
 import { type TUser } from '@common/types';
-import { AddToCartDtO, ParamDTO } from './dto/create-cart.dto';
+import { AddToCartDtO } from './dto/create-cart.dto';
+import { ParamDTO } from '@common/dto';
 
 @Controller('cart')
 @Auth(['Admin', 'Seller', 'Customer'])

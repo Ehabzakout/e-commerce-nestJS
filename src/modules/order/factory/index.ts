@@ -7,7 +7,11 @@ import {
 } from '../entities/order.entity';
 
 import { Types } from 'mongoose';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { ProductRepo } from '@models';
 import { CartService } from '@modules/cart/cart.service';
@@ -43,6 +47,15 @@ export class OrderFactory {
 
       0,
     );
+
+    if (
+      typeof coupon !== 'string' &&
+      (!coupon.active ||
+        coupon.to < new Date(Date.now()) ||
+        coupon.from > new Date(Date.now()))
+    )
+      throw new BadRequestException('Invalid Coupon or expired');
+
     if (typeof coupon !== 'string') {
       order.coupon = new OrderCoupon();
       order.coupon.couponId = coupon?._id;

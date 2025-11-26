@@ -48,13 +48,3 @@ export class Coupon {
 }
 
 export const couponSchema = SchemaFactory.createForClass(Coupon);
-
-couponSchema.post(/^find/, function (doc, next) {
-  if (
-    !doc.active ||
-    doc.to < new Date(Date.now()) ||
-    doc.from > new Date(Date.now())
-  )
-    throw new BadRequestException('Invalid Coupon or expired');
-  next();
-});

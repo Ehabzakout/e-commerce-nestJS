@@ -1,9 +1,15 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { UpdateCouponDto } from './dto/update-coupon.dto';
 import { CouponEntity } from './entities/coupon.entity';
 import { CouponRepo } from 'src/models/coupon/coupon.repo';
 import { Coupon } from 'src/models/coupon/coupon.schema';
+import { Types } from 'mongoose';
+import { TUser } from '@common/types';
 
 @Injectable()
 export class CouponService {
@@ -18,21 +24,21 @@ export class CouponService {
     return newCoupon;
   }
 
-  findAll() {
-    return `This action returns all coupon`;
-  }
-
   async getOne(code: string): Promise<Coupon | string> {
     const coupon = await this.couponRepo.getOne({ code });
     if (coupon && coupon.active) return coupon;
     else return 'Invalid coupon';
   }
 
-  update(id: number, updateCouponDto: UpdateCouponDto) {
-    return `This action updates a #${id} coupon`;
+  async getAllCoupons() {
+    return await this.couponRepo.getMany();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} coupon`;
+  async remove(id: Types.ObjectId | string) {
+    const deletedCoupon = await this.couponRepo.getOneAndDelete({
+      _id: id,
+    });
+    if (!deletedCoupon) throw new NotFoundException("Can't found coupon");
+    return deletedCoupon;
   }
 }
